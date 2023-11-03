@@ -35,5 +35,6 @@
 			"@icons/*": ["./assets/icons/*"]
 		}
 	},
-	"include": ["src"]
+	"include": ["001-array-y-strings"],
+	"exclude": ["node_modules"]
 }

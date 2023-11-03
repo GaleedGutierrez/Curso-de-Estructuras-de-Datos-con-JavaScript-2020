@@ -253,12 +253,13 @@ const rules = {
 	"simple-import-sort/imports": "error",
 	"simple-import-sort/exports": "error",
 
-	"check-file/folder-naming-convention": [
-		"error",
-		{
-			"./src/**/": "KEBAB_CASE"
-		}
-	],
+	// Activar para proyectos
+	// "check-file/folder-naming-convention": [
+	// 	"error",
+	// 	{
+	// 		"./src/**/": "KEBAB_CASE"
+	// 	}
+	// ],
 
 	"unused-imports/no-unused-imports": "error",
 	"unused-imports/no-unused-vars": [

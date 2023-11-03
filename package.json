@@ -8,7 +8,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"prepare": "husky install"
 	},
 	"repository": {
 		"type": "git",
@@ -48,7 +49,7 @@
 		"eslint-plugin-prettier": "^5.0.1",
 		"eslint-plugin-simple-import-sort": "^10.0.0",
 		"eslint-plugin-unused-imports": "^3.0.0",
-		"husky": "^8.0.3",
+		"husky": "^8.0.0",
 		"prettier": "3.0.3",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.0.2"

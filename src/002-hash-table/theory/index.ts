@@ -1,36 +1,83 @@
-interface Data {
-	[key: number]: unknown[];
-	length: number;
-}
+type key = string;
+type value = number;
+type TupleData = [key, value];
+
+type Data = TupleData[][];
 
 class HashTable {
-	data: Data;
+	#data: Data;
 
 	public constructor(size: number) {
-		this.data = new Array(size);
+		this.#data = new Array(size);
 	}
 
-	public hashMethod(key: string) {
+	public set(key: string, value: number): Data {
+		const ADDRESS = this.#hashMethod(key);
+
+		if (!this.#data[ADDRESS]) {
+			this.#data[ADDRESS] = [];
+		}
+
+		this.#data[ADDRESS].push([key, value]);
+
+		return this.#data;
+	}
+
+	public get(key: string): number | undefined {
+		const CURRENT_BUCKET = this.#getBucket(key);
+
+		if (!CURRENT_BUCKET) return undefined;
+
+		const FOUND_BUCKET = CURRENT_BUCKET.find((item) => item[0] === key);
+		const VALUE = FOUND_BUCKET ? FOUND_BUCKET[1] : undefined;
+
+		return VALUE;
+	}
+
+	public delete(key: string) {
+		const CURRENT_BUCKET = this.#getBucket(key);
+
+		if (!CURRENT_BUCKET) return undefined;
+
+		const DELETE_INDEX = CURRENT_BUCKET.findIndex(
+			(item) => item[0] === key
+		);
+
+		const DELETED_ITEM = CURRENT_BUCKET.splice(DELETE_INDEX, 1)[0];
+
+		return DELETED_ITEM;
+	}
+
+	public getAllKeys() {
+		const HASHES = Object.keys(this.#data);
+		const keys: string[][] = [];
+
+		for (const ADDRESS of HASHES) {
+			const BUCKET = this.#data[Number(ADDRESS)];
+
+			keys.push(BUCKET.map((item) => item[0]));
+		}
+
+		return keys.join();
+	}
+
+	#hashMethod(key: string): number {
 		let hash = 0;
 
 		for (let i = 0; i < key.length; i++) {
-			hash = (hash + key.charCodeAt(i) * i) % this.data.length;
-			console.log('i es: ', hash);
+			hash = (hash + key.charCodeAt(i) * i) % this.#data.length;
 		}
 
 		return hash;
 	}
 
-	public set(key: string, value: unknown): Data {
-		const ADDRESS = this.hashMethod(key);
+	#getBucket(key: string): TupleData[] | undefined {
+		const ADDRESS = this.#hashMethod(key);
+		const CURRENT_BUCKET = this.#data[ADDRESS];
 
-		if (!this.data[ADDRESS]) {
-			this.data[ADDRESS] = [];
-		}
+		if (!CURRENT_BUCKET) return undefined;
 
-		this.data[ADDRESS].push([key, value]);
-
-		return this.data;
+		return CURRENT_BUCKET;
 	}
 }
 
@@ -40,3 +87,15 @@ console.log(MY_HASH_TABLE);
 console.log(MY_HASH_TABLE.set('Diego', 1990));
 console.log(MY_HASH_TABLE.set('Mariana', 1998));
 console.log(MY_HASH_TABLE.set('Galeed', 2001));
+console.log(MY_HASH_TABLE.set('Midu', 2004));
+console.log(MY_HASH_TABLE.set('Zoom', 2004));
+
+console.log(MY_HASH_TABLE.get('XD')); // Undefined
+console.log(MY_HASH_TABLE.get('Galeed'));
+console.log(MY_HASH_TABLE.get('Diego'));
+console.log(MY_HASH_TABLE.get('Mariana'));
+console.log(MY_HASH_TABLE.delete('Diego'));
+// console.log(MY_HASH_TABLE.get('Diego'));
+
+console.log(MY_HASH_TABLE);
+console.log(MY_HASH_TABLE.getAllKeys());
